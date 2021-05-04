@@ -27,7 +27,7 @@ func main() {
 			City:       "BBMP",
 			DistrictId: "294",
 		},
-		PollInterval: 10 * time.Second,
+		PollInterval: 10 * time.Minute,
 	}
 
 	go checkService.InitSlotPoller()
