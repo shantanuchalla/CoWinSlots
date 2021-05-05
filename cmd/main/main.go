@@ -22,10 +22,13 @@ func main() {
 
 	checkService := &service.CowinSlotChecker{
 		CowinClient: cowinClient,
-		Location: contracts.Location{
-			State:      "Karnataka",
-			City:       "BBMP",
-			DistrictId: "294",
+		Locations: []*contracts.Location{
+			{State: "Karnataka", City: "BBMP"},
+			{State: "Karnataka", City: "Bangalore Rural"},
+			{State: "Karnataka", City: "Bangalore Urban"},
+			{State: "Telangana", City: "Hyderabad"},
+			{State: "Telangana", City: "Rangareddy"},
+			{State: "Telangana", City: "Medchal"},
 		},
 		PollInterval: 10 * time.Minute,
 	}

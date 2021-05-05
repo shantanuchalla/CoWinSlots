@@ -11,6 +11,24 @@ type Session struct {
 	Vaccine  string  `json:"vaccine"`
 }
 
+type StateInfo struct {
+	StateId   int    `json:"state_id"`
+	StateName string `json:"state_name"`
+}
+
+type StateResponse struct {
+	States []StateInfo `json:"states"`
+}
+
+type DistrictInfo struct {
+	DistrictId   int    `json:"district_id"`
+	DistrictName string `json:"district_name"`
+}
+
+type DistrictResponse struct {
+	Districts []DistrictInfo `json:"districts"`
+}
+
 type Centre struct {
 	Name     string     `json:"name"`
 	Pin      int        `json:"pincode"`

@@ -20,3 +20,9 @@ type AvailData struct {
 	Vaccine   string
 	Color     tablewriter.Colors
 }
+
+type VaccineData struct {
+	Capacity float64
+	Slots    int
+	Centres  int
+}
