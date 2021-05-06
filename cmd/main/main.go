@@ -10,13 +10,15 @@ import (
 )
 
 const (
-	baseUrl = "https://cdn-api.co-vin.in"
-	timeout = 10 * time.Second
+	baseUrl  = "https://cdn-api.co-vin.in"
+	timeout  = 100 * time.Second
+	interval = 1 * time.Minute
 )
 
 func main() {
+
 	cowinClient := &client.CowinClinet{
-		Client:  &http.Client{Timeout: timeout},
+		Client:  &http.Client{Timeout: timeout, Transport: &client.MyTransport{}},
 		BaseUrl: baseUrl,
 	}
 
@@ -24,13 +26,13 @@ func main() {
 		CowinClient: cowinClient,
 		Locations: []*contracts.Location{
 			{State: "Karnataka", City: "BBMP"},
-			{State: "Karnataka", City: "Bangalore Rural"},
+			//{State: "Karnataka", City: "Bangalore Rural"},
 			{State: "Karnataka", City: "Bangalore Urban"},
-			{State: "Telangana", City: "Hyderabad"},
-			{State: "Telangana", City: "Rangareddy"},
-			{State: "Telangana", City: "Medchal"},
+			//{State: "Telangana", City: "Hyderabad"},
+			//{State: "Telangana", City: "Rangareddy"},
+			//{State: "Telangana", City: "Medchal"},
 		},
-		PollInterval: 10 * time.Minute,
+		PollInterval: interval,
 	}
 
 	go checkService.InitSlotPoller()

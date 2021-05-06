@@ -13,7 +13,7 @@ import (
 var (
 	blankColor         = &tablewriter.Colors{}
 	noSlotColor        = &tablewriter.Colors{tablewriter.FgWhiteColor, tablewriter.Bold, tablewriter.BgHiRedColor}
-	availableSlotColor = &tablewriter.Colors{tablewriter.FgWhiteColor, tablewriter.Bold, tablewriter.BgHiGreenColor}
+	availableSlotColor = &tablewriter.Colors{tablewriter.FgBlackColor, tablewriter.Bold, tablewriter.BgHiGreenColor}
 )
 
 func (checker CowinSlotChecker) processSlots(req contracts.SlotRequest) error {

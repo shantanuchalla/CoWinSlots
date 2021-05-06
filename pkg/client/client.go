@@ -16,6 +16,7 @@ type CowinClinet struct {
 
 func (client CowinClinet) CallCoWinAPI(districtId, date string) (*contracts.SlotResponse, error) {
 	request := client.getAvailableSlotRequest(districtId, date)
+
 	response, err := client.Client.Get(request)
 	if err != nil {
 		log.Error().Err(err).Msg("error calling CoWin API")
