@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -70,7 +71,7 @@ func (checker CowinSlotChecker) getSlotRequest(loc *contracts.Location) (*contra
 
 	return &contracts.SlotRequest{
 		Location: *loc,
-		Date:     strconv.Itoa(day) + "-" + strconv.Itoa(int(month)) + "-" + strconv.Itoa(year),
+		Date:     fmt.Sprintf("%02d", day) + "-" + fmt.Sprintf("%02d", int(month)) + "-" + fmt.Sprintf("%04d", year),
 	}, nil
 }
 
