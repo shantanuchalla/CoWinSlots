@@ -21,21 +21,21 @@ type CowinSlotChecker struct {
 	PollInterval time.Duration
 }
 
-func (checker CowinSlotChecker) InitSlotPoller() {
+func (checker CowinSlotChecker) InitSlotPoller(fetchDistrictId bool) {
 	log.Info().Msgf("Initializing Poller with interval -- %+v", checker.PollInterval)
 
-	checker.initializeSlotCheck()
+	checker.initializeSlotCheck(fetchDistrictId)
 	ticker := time.NewTicker(checker.PollInterval)
 	tickChannel := ticker.C
 	for tick := range tickChannel {
 		log.Info().Msgf("received tick <- +%v", tick)
-		checker.initializeSlotCheck()
+		checker.initializeSlotCheck(fetchDistrictId)
 	}
 }
 
-func (checker CowinSlotChecker) initializeSlotCheck() {
+func (checker CowinSlotChecker) initializeSlotCheck(fetchDistrictId bool) {
 	for _, loc := range checker.Locations {
-		req, err := checker.getSlotRequest(loc)
+		req, err := checker.getSlotRequest(loc, fetchDistrictId)
 		if err != nil {
 			continue
 		}
@@ -53,29 +53,30 @@ func (checker CowinSlotChecker) InitPollListener() {
 	}
 }
 
-func (checker CowinSlotChecker) getSlotRequest(loc *contracts.Location) (*contracts.SlotRequest, error) {
+func (checker CowinSlotChecker) getSlotRequest(loc *contracts.Location, fetchDistrictId bool) (*contracts.SlotRequest, error) {
 	currentTime := time.Now()
 	year, month, day := currentTime.Date()
 
-	stateId, err := checker.getStateId(loc)
-	if err != nil {
-		return nil, err
+	if fetchDistrictId {
+		stateId, err := checker.getStateId(loc)
+		if err != nil {
+			return nil, err
+		}
+
+		districtId, err := checker.getDistrictId(loc, stateId)
+		if err != nil {
+			return nil, err
+		}
+
+		loc.DistrictId = strconv.Itoa(districtId)
 	}
-
-	districtId, err := checker.funcName(loc, stateId)
-	if err != nil {
-		return nil, err
-	}
-
-	loc.DistrictId = strconv.Itoa(districtId)
-
 	return &contracts.SlotRequest{
 		Location: *loc,
 		Date:     fmt.Sprintf("%02d", day) + "-" + fmt.Sprintf("%02d", int(month)) + "-" + fmt.Sprintf("%04d", year),
 	}, nil
 }
 
-func (checker CowinSlotChecker) funcName(loc *contracts.Location, stateId int) (int, error) {
+func (checker CowinSlotChecker) getDistrictId(loc *contracts.Location, stateId int) (int, error) {
 	districts, err := checker.CowinClient.GetDistricts(stateId)
 	if err != nil {
 		return -1, err

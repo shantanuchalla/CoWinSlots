@@ -85,20 +85,37 @@ func (checker CowinSlotChecker) processSlots(req contracts.SlotRequest) error {
 		}
 	}
 
-	table.Append([]string{"", "", "", "", "", "", "", "", ""})
+	//table.Append([]string{"", "", "", "", "", "", "", "", ""})
 
-	for vaccine, slotCount := range vaccineSlotCount {
-		table.Append([]string{vaccine, "Centres", strconv.Itoa(vaccineCentreCount[vaccine]),
-			"Slots", strconv.Itoa(slotCount),
-			"Capacity", fmt.Sprintf("%f", vaccineCapacityCount[vaccine]),
-			"", ""})
-	}
+	//for vaccine, slotCount := range vaccineSlotCount {
+	//	table.Append([]string{vaccine, "Centres", strconv.Itoa(vaccineCentreCount[vaccine]),
+	//		"Slots", strconv.Itoa(slotCount),
+	//		"Capacity", fmt.Sprintf("%f", vaccineCapacityCount[vaccine]),
+	//		"", ""})
+	//}
 
 	table.SetFooter([]string{"Total",
 		"Centres", strconv.Itoa(totalAvailableCentres),
 		"Slots", strconv.Itoa(totalAvailableSlots),
 		"Capacity", fmt.Sprintf("%f", totalAvailableCapacity),
 		"", ""})
+
+	footerColors := make([]tablewriter.Colors, 0)
+	for i := 0; i < 6; i++ {
+		footerColors = append(footerColors, *blankColor)
+	}
+
+	if totalAvailableCapacity > 0 {
+		footerColors = append(footerColors, *availableSlotColor)
+	} else {
+		footerColors = append(footerColors, *noSlotColor)
+	}
+
+	for i := 0; i < 2; i++ {
+		footerColors = append(footerColors, *blankColor)
+	}
+
+	table.SetFooterColor(footerColors...)
 
 	if totalAvailableSlots > 0 {
 		table.Render()
